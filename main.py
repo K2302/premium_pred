@@ -1,17 +1,18 @@
-# main.py
+# codebasics ML course: codebasics.io, all rights reserverd
+
 import streamlit as st
 from prediction_helper import predict
 
-st.set_page_config(page_title="Health Insurance Cost Predictor", layout="wide")
-st.title('🩺 Health Insurance Cost Predictor')
+# Define the page layout
+st.title('Health Insurance Cost Predictor')
 
 categorical_options = {
     'Gender': ['Male', 'Female'],
     'Marital Status': ['Unmarried', 'Married'],
     'BMI Category': ['Normal', 'Obesity', 'Overweight', 'Underweight'],
     'Smoking Status': ['No Smoking', 'Regular', 'Occasional'],
-    'Employment Status': ['Salaried', 'Self-Employed'],
-    'Region': ['Northwest', 'Southeast', 'Southwest'],
+    'Employment Status': ['Salaried', 'Self-Employed', 'Freelancer', ''],
+    'Region': ['Northwest', 'Southeast', 'Northeast', 'Southwest'],
     'Medical History': [
         'No Disease', 'Diabetes', 'High blood pressure', 'Diabetes & High blood pressure',
         'Thyroid', 'Heart disease', 'High blood pressure & Heart disease', 'Diabetes & Thyroid',
@@ -20,20 +21,22 @@ categorical_options = {
     'Insurance Plan': ['Bronze', 'Silver', 'Gold']
 }
 
+# Create four rows of three columns each
 row1 = st.columns(3)
 row2 = st.columns(3)
 row3 = st.columns(3)
 row4 = st.columns(3)
 
+# Assign inputs to the grid
 with row1[0]:
-    age = st.number_input('Age', min_value=18, max_value=100, step=1)
+    age = st.number_input('Age', min_value=18, step=1, max_value=100)
 with row1[1]:
-    number_of_dependants = st.number_input('Number of Dependants', min_value=0, max_value=20, step=1)
+    number_of_dependants = st.number_input('Number of Dependants', min_value=0, step=1, max_value=20)
 with row1[2]:
-    income_lakhs = st.number_input('Income in Lakhs', min_value=0, max_value=200, step=1)
+    income_lakhs = st.number_input('Income in Lakhs', step=1, min_value=0, max_value=200)
 
 with row2[0]:
-    genetical_risk = st.slider('Genetical Risk (0.0 to 1.0)', 0.0, 1.0, step=0.01)
+    genetical_risk = st.number_input('Genetical Risk', step=1, min_value=0, max_value=5)
 with row2[1]:
     insurance_plan = st.selectbox('Insurance Plan', categorical_options['Insurance Plan'])
 with row2[2]:
@@ -53,6 +56,7 @@ with row4[1]:
 with row4[2]:
     medical_history = st.selectbox('Medical History', categorical_options['Medical History'])
 
+# Create a dictionary for input values
 input_dict = {
     'Age': age,
     'Number of Dependants': number_of_dependants,
@@ -68,6 +72,7 @@ input_dict = {
     'Medical History': medical_history
 }
 
+# Button to make prediction
 if st.button('Predict'):
     prediction = predict(input_dict)
-    st.success(f'💰 Predicted Health Insurance Cost Category: {prediction}')
+    st.success(f'Predicted Health Insurance Cost: {prediction}')
